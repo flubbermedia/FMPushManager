@@ -75,9 +75,14 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
 - (void)handleAPN:(NSDictionary *)userInfo
 {
     NSString *urlString = userInfo[_apnUserInfoURLKey];
+    NSURL *url = (urlString.length) ? [NSURL URLWithString:urlString] : nil;
     
-    if (urlString.length) {
-        [self showWebOverlay:[NSURL URLWithString:urlString]];
+    if ([url.absoluteString hasPrefix:@"http"]) {
+        [self showWebOverlay:url];
+    } else if (url) {
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }
     } else {
         [self showStandardAlertView:userInfo];
     }
