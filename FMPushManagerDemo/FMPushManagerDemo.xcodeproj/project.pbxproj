@@ -20,7 +20,7 @@
 		1440D6AC17008B1E008FAFD2 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1440D6AA17008B1E008FAFD2 /* MainStoryboard_iPad.storyboard */; };
 		1440D6AF17008B1E008FAFD2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1440D6AE17008B1E008FAFD2 /* ViewController.m */; };
 		1440D6B917008F80008FAFD2 /* FMPushManager.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1440D6B617008F80008FAFD2 /* FMPushManager.bundle */; };
-		1440D6BA17008F80008FAFD2 /* FMPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1440D6B817008F80008FAFD2 /* FMPushManager.m */; };
+		1440D6BA17008F80008FAFD2 /* FMPushPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1440D6B817008F80008FAFD2 /* FMPushPanel.m */; };
 		1440D6BD17009061008FAFD2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1440D6BB17009061008FAFD2 /* AudioToolbox.framework */; };
 		1440D6BE17009061008FAFD2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1440D6BC17009061008FAFD2 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
@@ -44,8 +44,8 @@
 		1440D6AD17008B1E008FAFD2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		1440D6AE17008B1E008FAFD2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		1440D6B617008F80008FAFD2 /* FMPushManager.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FMPushManager.bundle; sourceTree = "<group>"; };
-		1440D6B717008F80008FAFD2 /* FMPushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMPushManager.h; sourceTree = "<group>"; };
-		1440D6B817008F80008FAFD2 /* FMPushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMPushManager.m; sourceTree = "<group>"; };
+		1440D6B717008F80008FAFD2 /* FMPushPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMPushPanel.h; sourceTree = "<group>"; };
+		1440D6B817008F80008FAFD2 /* FMPushPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMPushPanel.m; sourceTree = "<group>"; };
 		1440D6BB17009061008FAFD2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		1440D6BC17009061008FAFD2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -128,8 +128,8 @@
 			isa = PBXGroup;
 			children = (
 				1440D6B617008F80008FAFD2 /* FMPushManager.bundle */,
-				1440D6B717008F80008FAFD2 /* FMPushManager.h */,
-				1440D6B817008F80008FAFD2 /* FMPushManager.m */,
+				1440D6B717008F80008FAFD2 /* FMPushPanel.h */,
+				1440D6B817008F80008FAFD2 /* FMPushPanel.m */,
 			);
 			name = FMPushManager;
 			path = ../FMPushManager;
@@ -206,7 +206,7 @@
 				1440D69C17008B1E008FAFD2 /* main.m in Sources */,
 				1440D6A017008B1E008FAFD2 /* AppDelegate.m in Sources */,
 				1440D6AF17008B1E008FAFD2 /* ViewController.m in Sources */,
-				1440D6BA17008F80008FAFD2 /* FMPushManager.m in Sources */,
+				1440D6BA17008F80008FAFD2 /* FMPushPanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,10 +301,12 @@
 		1440D6B317008B1E008FAFD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Maurizio Cremaschi (AY8S497M6P)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FMPushManagerDemo/FMPushManagerDemo-Prefix.pch";
 				INFOPLIST_FILE = "FMPushManagerDemo/FMPushManagerDemo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7BBF5773-5B7F-4E42-8549-C27F09DBE179";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

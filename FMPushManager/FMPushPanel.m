@@ -5,7 +5,7 @@
 //  Copyright (c) 2013 Flubber Media Ltd. All rights reserved.
 //
 
-#import "FMPushManager.h"
+#import "FMPushPanel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -13,7 +13,7 @@ static NSString * const kDefaultAPNUserInfoURLKey = @"flubber.url";
 static NSString * const kUserDefaultsURLKey = @"com.flubbermedia.pushmanager.url.cached";
 static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversion=%@&applocale=%@&device=%@";
 
-@interface FMPushManager ()
+@interface FMPushPanel ()
 
 @property (strong, nonatomic) UIView *darkView;
 @property (strong, nonatomic) UIWebView *webView;
@@ -23,14 +23,14 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
 
 @end
 
-@implementation FMPushManager
+@implementation FMPushPanel
 
-+ (FMPushManager *)sharedInstance
++ (FMPushPanel *)sharedInstance
 {
-    static FMPushManager *_sharedInstance;
+    static FMPushPanel *_sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedInstance = [FMPushManager new];
+        _sharedInstance = [FMPushPanel new];
     });
     return _sharedInstance;
 }
@@ -40,6 +40,10 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
     self = [super init];
     if (self) {
         _apnUserInfoURLKey = kDefaultAPNUserInfoURLKey;
+        
+        self.view.backgroundColor = [UIColor clearColor];
+        self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        self.view.autoresizesSubviews = YES;
     }
     return self;
 }
@@ -147,7 +151,10 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
     
     _webViewIsVisible = YES;
     
-    UIView *rootView = [UIApplication sharedApplication].keyWindow.rootViewController.view;
+    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+    //rootVC.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [rootVC presentViewController:[FMPushPanel sharedInstance] animated:NO completion:nil];
+    UIView *rootView = self.view;
     
     _darkView = [[UIView alloc] initWithFrame:rootView.bounds];
     _darkView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
@@ -209,6 +216,11 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
         _darkView = nil;
         _webView = nil;
         _closeButton = nil;
+        
+        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        [rootVC dismissViewControllerAnimated:NO completion:^{
+            rootVC.modalPresentationStyle = UIModalPresentationFullScreen;
+        }];
     }];
 }
 
@@ -278,6 +290,16 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
 	
 	NSString *urlPath = [[url absoluteString] stringByAppendingString:urlParameters];
 	return [NSURL URLWithString:urlPath];
+}
+
+#pragma mark - Rotations
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        return UIInterfaceOrientationMaskPortrait;
+    }    
+    return UIInterfaceOrientationMaskAll;
 }
 
 @end

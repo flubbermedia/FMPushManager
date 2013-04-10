@@ -7,14 +7,14 @@
 //
 
 #import "AppDelegate.h"
-#import "FMPushManager.h"
+#import "FMPushPanel.h"
 
 @implementation AppDelegate
 
 + (void)initialize
 {
-    [[FMPushManager sharedInstance] registerForApplicationNotifications];
-    [[FMPushManager sharedInstance] debugWithURL:[NSURL URLWithString:@"http://www.google.com"]];
+    [[FMPushPanel sharedInstance] registerForApplicationNotifications];
+    [[FMPushPanel sharedInstance] debugWithURL:[NSURL URLWithString:@"http://www.google.com"]];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -52,7 +52,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[FMPushManager sharedInstance] handleAPN:userInfo];
+    [[FMPushPanel sharedInstance] handleAPN:userInfo];
 }
 
 @end
