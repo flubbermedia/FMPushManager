@@ -10,6 +10,8 @@
 @interface FMPushManager : NSObject <UIWebViewDelegate>
 
 @property (strong, nonatomic) NSString *apnUserInfoURLKey;
+@property (assign, nonatomic) CGRect frameForiPadPanel;
+@property (assign, nonatomic) CGRect frameForiPhonePanel;
 
 + (FMPushManager *)sharedInstance;
 - (void)registerForApplicationNotifications;

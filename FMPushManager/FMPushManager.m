@@ -40,6 +40,8 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
     self = [super init];
     if (self) {
         _apnUserInfoURLKey = kDefaultAPNUserInfoURLKey;
+        _frameForiPhonePanel = CGRectMake(0, 0, 240, 300);
+        _frameForiPadPanel = CGRectMake(0, 0, 480, 600);
     }
     return self;
 }
@@ -155,7 +157,14 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
     _darkView.alpha = 0;
     [rootView addSubview:_darkView];
     
-    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 280, 440)];
+    CGRect frame;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        frame = _frameForiPadPanel;
+    } else {
+        frame = _frameForiPhonePanel;
+    }
+    
+    _webView = [[UIWebView alloc] initWithFrame:frame];
     _webView.delegate = self;
     _webView.backgroundColor = [UIColor blackColor];
     _webView.opaque = NO;
