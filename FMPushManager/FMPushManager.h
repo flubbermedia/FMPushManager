@@ -10,6 +10,7 @@
 @interface FMPushManager : NSObject <UIWebViewDelegate>
 
 @property (strong, nonatomic) NSString *apnUserInfoURLKey;
+@property (strong, nonatomic) NSDictionary *requestLocalParameters;
 @property (assign, nonatomic) CGRect frameForiPadPanel;
 @property (assign, nonatomic) CGRect frameForiPhonePanel;
 

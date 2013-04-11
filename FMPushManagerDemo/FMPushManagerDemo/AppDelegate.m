@@ -14,7 +14,7 @@
 + (void)initialize
 {
     [[FMPushManager sharedInstance] registerForApplicationNotifications];
-    [[FMPushManager sharedInstance] debugWithURL:[NSURL URLWithString:@"http://www.google.com"]];
+    [[FMPushManager sharedInstance] debugWithURL:[NSURL URLWithString:@"http://services.flubbermedia.com/pushmanager/0"]];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

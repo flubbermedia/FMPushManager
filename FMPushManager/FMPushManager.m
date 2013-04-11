@@ -11,7 +11,25 @@
 
 static NSString * const kDefaultAPNUserInfoURLKey = @"flubber.url";
 static NSString * const kUserDefaultsURLKey = @"com.flubbermedia.pushmanager.url.cached";
-static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversion=%@&applocale=%@&device=%@";
+
+@implementation NSURLRequest (DictionaryParameters)
+
++ (NSURLRequest *)requestWithURL:(NSURL *)url GETParameters:(NSDictionary *)parameters
+{
+    NSMutableArray *parts = [NSMutableArray new];
+    for (NSString *key in parameters) {
+        NSString *encodedValue = [parameters[key] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *encodedKey = [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *part = [NSString stringWithFormat: @"%@=%@", encodedKey, encodedValue];
+        [parts addObject:part];
+    }
+    NSString *encodedDictionary = [parts componentsJoinedByString:@"&"];
+    NSString *urlPath = [NSString stringWithFormat:@"%@?%@", url, encodedDictionary];
+    
+    return [NSURLRequest requestWithURL:[NSURL URLWithString:urlPath]];
+}
+
+@end
 
 @interface FMPushManager ()
 
@@ -42,6 +60,12 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
         _apnUserInfoURLKey = kDefaultAPNUserInfoURLKey;
         _frameForiPhonePanel = CGRectMake(0, 0, 240, 300);
         _frameForiPadPanel = CGRectMake(0, 0, 480, 600);
+        _requestLocalParameters = @{
+                                    @"appid":      [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"],
+                                    @"appversion": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+                                    @"applocale":  [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode],
+                                    @"device":     [[UIDevice currentDevice] model],
+                                    };
     }
     return self;
 }
@@ -143,7 +167,7 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
     }
     
     if (_webViewIsVisible) {
-        [_webView loadRequest:[NSURLRequest requestWithURL:[self urlWithParameters:url]]];
+        [_webView loadRequest:[self requestWithURL:url]];
         return;
     }
     
@@ -191,10 +215,7 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
     _activityIndicatorView.hidesWhenStopped = YES;
     [_webView addSubview:_activityIndicatorView];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnDarkOverlay:)];
-    [_darkView addGestureRecognizer:tap];
-    
-	[_webView loadRequest:[NSURLRequest requestWithURL:[self urlWithParameters:url]]];
+	[_webView loadRequest:[self requestWithURL:url]];
     
     double delayInSeconds = 0.5;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -224,11 +245,6 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
 #pragma mark - Actions & Gestures
 
 - (void)tapOnCloseButton:(id)sender
-{
-    [self dismissWebOverlay:YES];
-}
-
-- (void)tapOnDarkOverlay:(UITapGestureRecognizer *)gesture
 {
     [self dismissWebOverlay:YES];
 }
@@ -274,19 +290,12 @@ static NSString * const kApplicationsRemoteRequestFormat = @"?appid=%@&appversio
 
 #pragma mark - Utilities
 
-- (NSURL *)urlWithParameters:(NSURL *)url
+- (NSURLRequest *)requestWithURL:(NSURL *)url
 {
-    NSString *urlParameters = [NSString stringWithFormat:kApplicationsRemoteRequestFormat,
-							   [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"],
-							   [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-							   [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode],
-							   [[UIDevice currentDevice] model]
-							   ];
-	
-	urlParameters = [urlParameters stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-	
-	NSString *urlPath = [[url absoluteString] stringByAppendingString:urlParameters];
-	return [NSURL URLWithString:urlPath];
+    if (_requestLocalParameters) {
+        return [NSURLRequest requestWithURL:url GETParameters:_requestLocalParameters];
+    }
+    return [NSURLRequest requestWithURL:url];
 }
 
 @end
