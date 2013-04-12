@@ -299,6 +299,9 @@ static NSString * const kUserDefaultsURLKey = @"com.flubbermedia.pushmanager.url
 
 - (void)clearNotifications
 {
+    // workaround to clear the notifications in the notification center
+    // if you do not use the badge increment you need to set the badge
+    // number to 1 before to set it to 0
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
