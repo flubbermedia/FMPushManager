@@ -158,10 +158,7 @@ static NSString * const kUserDefaultsURLKey = @"com.flubbermedia.pushmanager.url
 
 - (void)showWebOverlay:(NSURL *)url caching:(BOOL)caching
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    });
+    [self clearNotifications];
     
     if (caching) {
         [[NSUserDefaults standardUserDefaults] setURL:url forKey:kUserDefaultsURLKey];
@@ -298,6 +295,13 @@ static NSString * const kUserDefaultsURLKey = @"com.flubbermedia.pushmanager.url
         return [NSURLRequest requestWithURL:url GETParameters:_requestLocalParameters];
     }
     return [NSURLRequest requestWithURL:url];
+}
+
+- (void)clearNotifications
+{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
 
 @end
